@@ -61,7 +61,13 @@ if (command === 'delete') {
 
 if (command === 'eod') {
   getTodaysEntries()
-    .then((result) => console.log(result))
+    .then((result: TaskEntry[]) => {
+      let outputText = '';
+      for (let entry of result) {
+        outputText = `${entry.description}. ${outputText}`
+      }
+      console.log(outputText)
+    })
     .catch((error) => console.log(error))
 }
 

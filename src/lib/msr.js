@@ -52,7 +52,13 @@ if (command === 'delete') {
 }
 if (command === 'eod') {
     (0, sqlite3_1.getTodaysEntries)()
-        .then((result) => console.log(result))
+        .then((result) => {
+        let outputText = '';
+        for (let entry of result) {
+            outputText = `${entry.description}. ${outputText}`;
+        }
+        console.log(outputText);
+    })
         .catch((error) => console.log(error));
 }
 if (command === 'eom') {

@@ -43,7 +43,7 @@ export const addEntry = (entry: string) => {
   })
 }
 
-export const getTodaysEntries = () => {
+export const getTodaysEntries = (): Promise<any> => {
   return new Promise((resolve, reject) => {
     db.all(`select description, date_added from task where date_added = date('now')`,
     (err, result) => {
