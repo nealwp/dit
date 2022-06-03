@@ -1,12 +1,14 @@
 import config from '../../msrrc.json';
 import sqlite3 from 'sqlite3';
+import { readFileSync } from 'fs';
 
 const SQLite3 = sqlite3.verbose();
 const db = new SQLite3.Database(config.dbPath);
 
 export const getDBVersion = () => {
   return new Promise((resolve, reject) => {
-    db.all("select sqlite_version()", (err, result) => {
+    const sql = readFileSync('./src/sql/database_version.sql', {encoding: 'utf8'})
+    db.all(sql, (err, result) => {
       if (err) {
         reject(err);
       }
@@ -17,10 +19,8 @@ export const getDBVersion = () => {
 
 export const initializeDB = () => {
   return new Promise((resolve, reject) => {
-    db.all(`create table if not exists task (
-        description text not null,
-        date_added date not null
-      );`, (err, result) => {
+    const sql = readFileSync('./src/sql/initialize_msrdb.sql', {encoding: 'utf8'})
+    db.all(sql, (err, result) => {
         if (err) {
           reject(err)
         }
@@ -31,10 +31,8 @@ export const initializeDB = () => {
 
 export const addEntry = (entry: string) => {
   return new Promise((resolve, reject) => {
-    db.all(`insert into task values ($description, date('now'));`, 
-      {
-        $description: entry,
-      }, (err, result) => {
+    const sql = readFileSync('./src/sql/insert_entry.sql', {encoding: 'utf8'})
+    db.all(sql, { $description: entry }, (err, result) => {
         if (err) {
           reject(err)
         }
@@ -45,8 +43,8 @@ export const addEntry = (entry: string) => {
 
 export const getTodaysEntries = (): Promise<any> => {
   return new Promise((resolve, reject) => {
-    db.all(`select description, date_added from task where date_added = date('now')`,
-    (err, result) => {
+    const sql = readFileSync('./src/sql/get_today_entries.sql', {encoding: 'utf8'})
+    db.all(sql, (err, result) => {
       if (err) {
         reject(err)
       }
@@ -102,6 +100,19 @@ export const deleteEntry = (id: string) => {
     db.all(`
     delete from task where rowid = $id`,
     {$id: id},
+    (err, result) => {
+      if (err) {
+        reject(err)
+      }
+      resolve(result)
+    })
+  })
+}
+
+export const updateEntry = (id: string, updatedEntry: string) => {
+  return new Promise((resolve, reject) => {
+    db.all(`update task set description = $description where rowid = $rowid`,
+    {$description: updatedEntry, $rowid: id},
     (err, result) => {
       if (err) {
         reject(err)

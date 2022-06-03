@@ -6,7 +6,8 @@ import {
   getMonthyReport,
   getAllEntries,
   getEntry,
-  deleteEntry
+  deleteEntry,
+  updateEntry
 } from './sqlite3';
 import promptSync from 'prompt-sync'
 
@@ -77,21 +78,42 @@ if (command === 'eom') {
     .catch((error) => console.log(error))
 }
 
+if (command === 'edit') {
+  const entryId = process.argv[3];
+  if (!entryId) {
+    console.log('Error: delete command missing entry id')
+    process.exit()
+  }
+  getEntry(entryId)
+  .then((result) => {
+    console.log(result)
+    const updatedEntry = prompt('Updated entry text: ')
+    if (updatedEntry) {
+      updateEntry(entryId, updatedEntry)
+        .then((result) => console.log(result))
+        .catch((error) => console.log(error))
+    } else {
+      console.log('no changes made')
+    }
+  })
+    .catch((error) => console.log(error))
+}
+
 if (command === 'help') {
   const helpText = `
   add <entrytext>\tcreate an entry for the current date
+  all\t\t\tprints all entries
   delete <id>\t\tdelete an entry by id
   eod\t\t\tprints all entries for today
   eom\t\t\tprints all entries for current month
   help\t\t\tdisplays this help
   init\t\t\tinitializes database (only used for setup)
-  list\t\t\tprints all entries
   test\t\t\ttest database connection
   `
   console.log(helpText);
 }
 
-if (command === 'list') {
+if (command === 'all') {
   getAllEntries()
     .then((result) => console.log(result))
     .catch((error) => console.log(error))
