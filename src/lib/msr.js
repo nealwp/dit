@@ -60,6 +60,19 @@ if (command === 'eom') {
         .then((result) => console.log(result))
         .catch((error) => console.log(error));
 }
+if (command === 'help') {
+    const helpText = `
+  add <entrytext>\tcreate an entry for the current date
+  delete <id>\t\tdelete an entry by id
+  eod\t\t\tprints all entries for today
+  eom\t\t\tprints all entries for current month
+  help\t\t\tdisplays this help
+  init\t\t\tinitializes database (only used for setup)
+  list\t\t\tprints all entries
+  test\t\t\ttest database connection
+  `;
+    console.log(helpText);
+}
 if (command === 'list') {
     (0, sqlite3_1.getAllEntries)()
         .then((result) => console.log(result))
