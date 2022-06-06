@@ -99,6 +99,10 @@ if (command === 'edit') {
     .catch((error) => console.log(error))
 }
 
+if (command === 'which') {
+  console.log(process.cwd())
+}
+
 if (command === 'help') {
   const helpText = `
   add <entrytext>\tcreate an entry for the current date
