@@ -55,11 +55,8 @@ export const getTodaysEntries = (): Promise<any> => {
 
 export const getMonthyReport = () => {
   return new Promise((resolve, reject) => {
-    db.all(`
-    select description, date_added
-    from task
-    where date_added between date('now', 'start of month') and date('now')`, 
-    (err, result) => {
+    const sql = readFileSync('./src/sql/get_month_entries.sql', {encoding: 'utf8'})
+    db.all(sql, (err, result) => {
       if (err) {
         reject(err)
       }
@@ -70,8 +67,8 @@ export const getMonthyReport = () => {
 
 export const getAllEntries = () => {
   return new Promise((resolve, reject) => {
-    db.all(`select rowid, description, date_added from task`,
-    (err, result) => {
+    const sql = readFileSync('./src/sql/get_all_entries.sql', {encoding: 'utf8'})
+    db.all(sql, (err, result) => {
       if (err) {
         reject(err)
       }
@@ -82,11 +79,8 @@ export const getAllEntries = () => {
 
 export const getEntry = (id: string) => {
   return new Promise((resolve, reject) => {
-    db.all(`
-    select rowid, description, date_added
-    from task where rowid = $id`,
-    {$id: id},
-    (err, result) => {
+    const sql = readFileSync('./src/sql/get_entry_by_id.sql', {encoding: 'utf8'})
+    db.all(sql, {$id: id}, (err, result) => {
       if (err) {
         reject(err)
       }
@@ -97,10 +91,8 @@ export const getEntry = (id: string) => {
 
 export const deleteEntry = (id: string) => {
   return new Promise((resolve, reject) => {
-    db.all(`
-    delete from task where rowid = $id`,
-    {$id: id},
-    (err, result) => {
+    const sql = readFileSync('./src/sql/delete_entry.sql', {encoding: 'utf8'})
+    db.all(sql, {$id: id}, (err, result) => {
       if (err) {
         reject(err)
       }
@@ -111,9 +103,8 @@ export const deleteEntry = (id: string) => {
 
 export const updateEntry = (id: string, updatedEntry: string) => {
   return new Promise((resolve, reject) => {
-    db.all(`update task set description = $description where rowid = $rowid`,
-    {$description: updatedEntry, $rowid: id},
-    (err, result) => {
+    const sql = readFileSync('./src/sql/update_entry.sql', {encoding: 'utf8'})
+    db.all(sql, {$description: updatedEntry, $rowid: id}, (err, result) => {
       if (err) {
         reject(err)
       }
