@@ -5,8 +5,12 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 const sqlite3_1 = require("./sqlite3");
 const prompt_sync_1 = __importDefault(require("prompt-sync"));
+const child_process_1 = require("child_process");
 const prompt = (0, prompt_sync_1.default)();
 const command = process.argv[2];
+const writeToClipboard = (data) => {
+    (0, child_process_1.spawn)('clip').stdin.end(data);
+};
 if (command === 'test') {
     console.log('app works');
     (0, sqlite3_1.getDBVersion)()
@@ -57,13 +61,26 @@ if (command === 'eod') {
         for (let entry of result) {
             outputText = `${entry.description}. ${outputText}`;
         }
+        writeToClipboard(outputText);
         console.log(outputText);
     })
         .catch((error) => console.log(error));
 }
 if (command === 'eom') {
     (0, sqlite3_1.getMonthyReport)()
-        .then((result) => console.log(result))
+        .then((result) => {
+        let entries = [];
+        result.forEach(e => {
+            if (!entries.includes(e.description)) {
+                entries.push(e.description);
+            }
+            return;
+        });
+        let output = '';
+        entries.forEach(e => output = `• ${e}.\n${output}`);
+        writeToClipboard(output);
+        console.log(`\n${output}`);
+    })
         .catch((error) => console.log(error));
 }
 if (command === 'edit') {

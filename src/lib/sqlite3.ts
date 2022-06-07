@@ -53,7 +53,7 @@ export const getTodaysEntries = (): Promise<any> => {
   })
 }
 
-export const getMonthyReport = () => {
+export const getMonthyReport = (): Promise<any> => {
   return new Promise((resolve, reject) => {
     const sql = readFileSync('./src/sql/get_month_entries.sql', {encoding: 'utf8'})
     db.all(sql, (err, result) => {

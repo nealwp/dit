@@ -59,10 +59,8 @@ const getTodaysEntries = () => {
 exports.getTodaysEntries = getTodaysEntries;
 const getMonthyReport = () => {
     return new Promise((resolve, reject) => {
-        db.all(`
-    select description, date_added
-    from task
-    where date_added between date('now', 'start of month') and date('now')`, (err, result) => {
+        const sql = (0, fs_1.readFileSync)('./src/sql/get_month_entries.sql', { encoding: 'utf8' });
+        db.all(sql, (err, result) => {
             if (err) {
                 reject(err);
             }
@@ -73,7 +71,8 @@ const getMonthyReport = () => {
 exports.getMonthyReport = getMonthyReport;
 const getAllEntries = () => {
     return new Promise((resolve, reject) => {
-        db.all(`select rowid, description, date_added from task`, (err, result) => {
+        const sql = (0, fs_1.readFileSync)('./src/sql/get_all_entries.sql', { encoding: 'utf8' });
+        db.all(sql, (err, result) => {
             if (err) {
                 reject(err);
             }
@@ -84,9 +83,8 @@ const getAllEntries = () => {
 exports.getAllEntries = getAllEntries;
 const getEntry = (id) => {
     return new Promise((resolve, reject) => {
-        db.all(`
-    select rowid, description, date_added
-    from task where rowid = $id`, { $id: id }, (err, result) => {
+        const sql = (0, fs_1.readFileSync)('./src/sql/get_entry_by_id.sql', { encoding: 'utf8' });
+        db.all(sql, { $id: id }, (err, result) => {
             if (err) {
                 reject(err);
             }
@@ -97,8 +95,8 @@ const getEntry = (id) => {
 exports.getEntry = getEntry;
 const deleteEntry = (id) => {
     return new Promise((resolve, reject) => {
-        db.all(`
-    delete from task where rowid = $id`, { $id: id }, (err, result) => {
+        const sql = (0, fs_1.readFileSync)('./src/sql/delete_entry.sql', { encoding: 'utf8' });
+        db.all(sql, { $id: id }, (err, result) => {
             if (err) {
                 reject(err);
             }
@@ -109,7 +107,8 @@ const deleteEntry = (id) => {
 exports.deleteEntry = deleteEntry;
 const updateEntry = (id, updatedEntry) => {
     return new Promise((resolve, reject) => {
-        db.all(`update task set description = $description where rowid = $rowid`, { $description: updatedEntry, $rowid: id }, (err, result) => {
+        const sql = (0, fs_1.readFileSync)('./src/sql/update_entry.sql', { encoding: 'utf8' });
+        db.all(sql, { $description: updatedEntry, $rowid: id }, (err, result) => {
             if (err) {
                 reject(err);
             }

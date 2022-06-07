@@ -10,9 +10,14 @@ import {
   updateEntry
 } from './sqlite3';
 import promptSync from 'prompt-sync'
+import { spawn } from 'child_process';
 
 const prompt = promptSync();
 const command = process.argv[2];
+
+const writeToClipboard = (data: string) => {
+  spawn('clip').stdin.end(data)
+}
 
 if (command === 'test') {
   console.log('app works');
@@ -67,6 +72,7 @@ if (command === 'eod') {
       for (let entry of result) {
         outputText = `${entry.description}. ${outputText}`
       }
+      writeToClipboard(outputText)
       console.log(outputText)
     })
     .catch((error) => console.log(error))
@@ -74,7 +80,19 @@ if (command === 'eod') {
 
 if (command === 'eom') {
   getMonthyReport()
-    .then((result) => console.log(result))
+    .then((result: TaskEntry[]) => {
+      let entries: string[] = [];
+      result.forEach(e => {
+        if (!entries.includes(e.description)){
+          entries.push(e.description)
+        } 
+        return
+      })
+      let output = '';
+      entries.forEach(e => output = `• ${e}.\n${output}`)
+      writeToClipboard(output)
+      console.log(`\n${output}`)
+    })
     .catch((error) => console.log(error))
 }
 
