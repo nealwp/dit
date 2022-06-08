@@ -89,7 +89,7 @@ if (command === 'eom') {
         return
       })
       let output = '';
-      entries.forEach(e => output = `• ${e}.\n${output}`)
+      entries.forEach(e => output = `- ${e}.\n${output}`)
       writeToClipboard(output)
       console.log(`\n${output}`)
     })
