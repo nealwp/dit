@@ -1,5 +1,7 @@
 # Auto MSR
 ### *A frictionless task logging and reporting tool in NodeJS*
+## TL;DR
+I built a tool that cut my time spent on required work reports from **3.5 hours per month** to **3.5 *minutes* per month**, saving me almost *40 hours per year.*
 ## The Problem(s)
 1. At the end of each working day I needed to report 3-4 things I had completed or was working on that day.
 1. At the end of the month I needed to compile a simple report of my key accomplishments for that month.
