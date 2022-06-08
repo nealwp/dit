@@ -1,5 +1,5 @@
 # Auto MSR
-### *An frictionless task logging and reporting tool in NodeJS*
+### *A frictionless task logging and reporting tool in NodeJS*
 ## The Problem(s)
 1. At the end of each working day I needed to report 3-4 things I had completed or was working on that day.
 1. At the end of the month I needed to compile a simple report of my key accomplishments for that month.
