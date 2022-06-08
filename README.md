@@ -30,7 +30,7 @@ It takes me ~7 seconds to add an entry. On average I do that 3 times per day, so
 
 At the end of the month, it takes ~9 seconds to generate my output and paste into an email. The duplicates are already removed, so add another 3 minutes for filtering down to the highlights.
 
-In total, I now spend about **3 minutes and 45 seconds** *per month* on my required reporting, **98.1% less time**. I'm saving 11,656 seconds every month - that's **38.9 hours saved per year.**
+In total, I now spend about **3 minutes and 45 seconds** *per month* on my required reporting, **98.1% less time**. I'm saving **11,656** seconds every month - that's **38.9 hours saved per year.**
 
 # Usage
 ## Add an Entry
