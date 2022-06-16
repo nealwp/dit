@@ -104,6 +104,22 @@ if (command === 'edit') {
     })
         .catch((error) => console.log(error));
 }
+if (command === 'backdate') {
+    const entryDate = process.argv[3];
+    const entryText = process.argv[4];
+    if (!entryDate) {
+        console.log('Error: backdate command missing entry date');
+        process.exit();
+    }
+    if (!entryText) {
+        console.log('Error: backdate command missing entry text');
+        process.exit();
+    }
+    const entryDateUTC = new Date(entryDate).toISOString();
+    (0, sqlite3_1.addBackdatedEntry)(entryDateUTC, entryText)
+        .then((result) => console.log(result))
+        .catch((error) => console.log(error));
+}
 if (command === 'which') {
     console.log(process.cwd());
 }

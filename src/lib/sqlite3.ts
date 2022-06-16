@@ -41,6 +41,18 @@ export const addEntry = (entry: string) => {
   })
 }
 
+export const addBackdatedEntry = (entryDate: string, entry: string) => {
+  return new Promise((resolve, reject) => {
+    const sql = readFileSync('./src/sql/insert_backdate_entry.sql', {encoding: 'utf8'})
+    db.all(sql, { $description: entry, $entrydate: entryDate }, (err, result) => {
+        if (err) {
+          reject(err)
+        }
+        resolve(result)
+      })
+  })
+}
+
 export const getTodaysEntries = (): Promise<any> => {
   return new Promise((resolve, reject) => {
     const sql = readFileSync('./src/sql/get_today_entries.sql', {encoding: 'utf8'})

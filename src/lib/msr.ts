@@ -2,6 +2,7 @@ import {
   getDBVersion,
   initializeDB,
   addEntry,
+  addBackdatedEntry,
   getTodaysEntries,
   getMonthyReport,
   getAllEntries,
@@ -114,6 +115,26 @@ if (command === 'edit') {
       console.log('no changes made')
     }
   })
+    .catch((error) => console.log(error))
+}
+
+if (command === 'backdate') {
+  const entryDate = process.argv[3]
+  const entryText = process.argv[4]
+  
+  if (!entryDate){
+    console.log('Error: backdate command missing entry date')
+    process.exit()
+  }
+
+  if (!entryText){
+    console.log('Error: backdate command missing entry text')
+    process.exit()
+  }
+
+  const entryDateUTC = new Date(entryDate).toISOString()
+  addBackdatedEntry(entryDateUTC, entryText)
+    .then((result) => console.log(result))
     .catch((error) => console.log(error))
 }
 
