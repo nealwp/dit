@@ -1,5 +1,5 @@
-# Auto MSR
-### *A frictionless task logging and reporting tool in NodeJS*
+# dit
+> *A frictionless task logging and reporting tool in NodeJS*
 ## TL;DR
 I built a tool that cut my time spent on required work reports from **3.5 hours per month** to **3.5 *minutes* per month**, saving me almost *40 hours per year.*
 ## The Problem(s)
@@ -37,7 +37,7 @@ In total, I now spend about **3 minutes and 45 seconds** *per month* on my requi
 # Usage
 ## Add an Entry
 ```bash
-msr add 'Completed some task'
+dit add 'Completed some task'
 ```
 Output:
 ```bash
@@ -45,7 +45,7 @@ Output:
 ```
 ## List all Entries
 ```bash
-msr all 
+dit all 
 ```
 
 Output:
@@ -60,7 +60,7 @@ Output:
 ```
 ## Get End-of-Day Report
 ```bash
-msr eod
+dit eod
 ```
 Output: *(this gets added to the clipboard for quick pasting!)*
 ```
@@ -68,7 +68,7 @@ Completed some task. Completed another task. Still working on X task.
 ```
 ## Get End-of-Month Report
 ```bash
-msr eom
+dit eom
 ```
 Output: *(this gets added to the clipboard for quick pasting!)*
 ```

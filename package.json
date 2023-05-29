@@ -1,13 +1,13 @@
 {
-  "name": "automsr",
+  "name": "@nealwp/dit",
   "version": "1.0.0",
-  "description": "cli tool for logging daily work and generating monthly status reports (MSR)",
+  "description": "cli tool for logging daily work and generating reports",
   "scripts": {
     "build": "tsc",
     "test": "node ./src/app.ts"
   },
   "bin": {
-    "msr": "./src/bin/msr"
+    "dit": "./index.js"
   },
   "author": "nealwp",
   "license": "ISC",
