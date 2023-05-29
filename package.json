@@ -4,7 +4,7 @@
   "description": "cli tool for logging daily work and generating reports",
   "scripts": {
     "build": "tsc",
-    "test": "node ./src/app.ts"
+    "test": "jest"
   },
   "bin": {
     "dit": "./index.js"

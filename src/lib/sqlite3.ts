@@ -1,6 +1,11 @@
-import config from '../../msrrc.json';
+// import config from '../../msrrc.json';
 import sqlite3 from 'sqlite3';
 import { readFileSync } from 'fs';
+
+// inline for now
+const config = {
+    dbPath: ""
+}
 
 const SQLite3 = sqlite3.verbose();
 const db = new SQLite3.Database(config.dbPath);
@@ -19,7 +24,7 @@ export const getDBVersion = () => {
 
 export const initializeDB = () => {
   return new Promise((resolve, reject) => {
-    const sql = readFileSync('./src/sql/initialize_msrdb.sql', {encoding: 'utf8'})
+    const sql = readFileSync('./src/sql/initialize_ditdb.sql', {encoding: 'utf8'})
     db.all(sql, (err, result) => {
         if (err) {
           reject(err)

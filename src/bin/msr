@@ -1,9 +1,0 @@
-#!/usr/bin/env node
-const config = require('../../msrrc.json');
-
-function start() {
-  process.chdir(config.appPath);
-  return import ('../lib/msr.js');
-}
-
-start();
