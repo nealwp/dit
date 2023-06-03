@@ -20,20 +20,21 @@ const writeToClipboard = (data: string) => {
   spawn('clip').stdin.end(data)
 }
 
-if (command === 'test') {
-  console.log('app works');
-  getDBVersion()
+export function test() {
+    console.log('app works');
+    getDBVersion()
     .then((result) => console.log(result))
-    .catch((error) => console.log(error))
-} 
+    .catch((error) => console.log(error)) 
+}
+ 
 
-if (command === 'init') {
+export function init() {
   initializeDB()
     .then((result) => console.log(result))
     .catch((error) => console.log(error))
 }
 
-if (command === 'add') {
+export function add() {
   const entry = process.argv[3];
   if (!entry) {
     console.log('Error: add command missing entry text')
@@ -44,7 +45,7 @@ if (command === 'add') {
   .catch((error) => console.log(error))
 }
 
-if (command === 'delete') {
+export function rm() {
   const entryId = process.argv[3];
   if (!entryId) {
     console.log('Error: delete command missing entry id')
@@ -66,7 +67,7 @@ if (command === 'delete') {
   .catch((error) => console.log(error))
 }
 
-if (command === 'eod') {
+export function eod() {
   getTodaysEntries()
     .then((result: TaskEntry[]) => {
       let outputText = '';
@@ -79,7 +80,7 @@ if (command === 'eod') {
     .catch((error) => console.log(error))
 }
 
-if (command === 'eom') {
+export function eom() {
   getMonthyReport()
     .then((result: TaskEntry[]) => {
       let entries: string[] = [];
@@ -97,7 +98,7 @@ if (command === 'eom') {
     .catch((error) => console.log(error))
 }
 
-if (command === 'edit') {
+export function edit() {
   const entryId = process.argv[3];
   if (!entryId) {
     console.log('Error: delete command missing entry id')
@@ -118,7 +119,7 @@ if (command === 'edit') {
     .catch((error) => console.log(error))
 }
 
-if (command === 'backdate') {
+export function backdate() {
   const entryDate = process.argv[3]
   const entryText = process.argv[4]
   
@@ -138,11 +139,8 @@ if (command === 'backdate') {
     .catch((error) => console.log(error))
 }
 
-if (command === 'which') {
-  console.log(process.cwd())
-}
 
-if (command === 'help') {
+export function help() {
   const helpText = `
   add <entrytext>\tcreate an entry for the current date
   all\t\t\tprints all entries
@@ -156,7 +154,7 @@ if (command === 'help') {
   console.log(helpText);
 }
 
-if (command === 'all') {
+export function ls() {
   getAllEntries()
     .then((result) => console.log(result))
     .catch((error) => console.log(error))

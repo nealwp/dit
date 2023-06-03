@@ -12,7 +12,7 @@ const db = new SQLite3.Database(config.dbPath);
 
 export const getDBVersion = () => {
   return new Promise((resolve, reject) => {
-    const sql = readFileSync('./src/sql/database_version.sql', {encoding: 'utf8'})
+    const sql = readFileSync('./sql/database_version.sql', {encoding: 'utf8'})
     db.all(sql, (err, result) => {
       if (err) {
         reject(err);
@@ -24,7 +24,7 @@ export const getDBVersion = () => {
 
 export const initializeDB = () => {
   return new Promise((resolve, reject) => {
-    const sql = readFileSync('./src/sql/initialize_ditdb.sql', {encoding: 'utf8'})
+    const sql = readFileSync('./sql/initialize_ditdb.sql', {encoding: 'utf8'})
     db.all(sql, (err, result) => {
         if (err) {
           reject(err)
@@ -36,7 +36,7 @@ export const initializeDB = () => {
 
 export const addEntry = (entry: string) => {
   return new Promise((resolve, reject) => {
-    const sql = readFileSync('./src/sql/insert_entry.sql', {encoding: 'utf8'})
+    const sql = readFileSync('./sql/insert_entry.sql', {encoding: 'utf8'})
     db.all(sql, { $description: entry }, (err, result) => {
         if (err) {
           reject(err)
@@ -48,7 +48,7 @@ export const addEntry = (entry: string) => {
 
 export const addBackdatedEntry = (entryDate: string, entry: string) => {
   return new Promise((resolve, reject) => {
-    const sql = readFileSync('./src/sql/insert_backdate_entry.sql', {encoding: 'utf8'})
+    const sql = readFileSync('./sql/insert_backdate_entry.sql', {encoding: 'utf8'})
     db.all(sql, { $description: entry, $entrydate: entryDate }, (err, result) => {
         if (err) {
           reject(err)
@@ -60,7 +60,7 @@ export const addBackdatedEntry = (entryDate: string, entry: string) => {
 
 export const getTodaysEntries = (): Promise<any> => {
   return new Promise((resolve, reject) => {
-    const sql = readFileSync('./src/sql/get_today_entries.sql', {encoding: 'utf8'})
+    const sql = readFileSync('./sql/get_today_entries.sql', {encoding: 'utf8'})
     db.all(sql, (err, result) => {
       if (err) {
         reject(err)
@@ -72,7 +72,7 @@ export const getTodaysEntries = (): Promise<any> => {
 
 export const getMonthyReport = (): Promise<any> => {
   return new Promise((resolve, reject) => {
-    const sql = readFileSync('./src/sql/get_month_entries.sql', {encoding: 'utf8'})
+    const sql = readFileSync('./sql/get_month_entries.sql', {encoding: 'utf8'})
     db.all(sql, (err, result) => {
       if (err) {
         reject(err)
@@ -84,7 +84,7 @@ export const getMonthyReport = (): Promise<any> => {
 
 export const getAllEntries = () => {
   return new Promise((resolve, reject) => {
-    const sql = readFileSync('./src/sql/get_all_entries.sql', {encoding: 'utf8'})
+    const sql = readFileSync('./sql/get_all_entries.sql', {encoding: 'utf8'})
     db.all(sql, (err, result) => {
       if (err) {
         reject(err)
@@ -96,7 +96,7 @@ export const getAllEntries = () => {
 
 export const getEntry = (id: string) => {
   return new Promise((resolve, reject) => {
-    const sql = readFileSync('./src/sql/get_entry_by_id.sql', {encoding: 'utf8'})
+    const sql = readFileSync('./sql/get_entry_by_id.sql', {encoding: 'utf8'})
     db.all(sql, {$id: id}, (err, result) => {
       if (err) {
         reject(err)
@@ -108,7 +108,7 @@ export const getEntry = (id: string) => {
 
 export const deleteEntry = (id: string) => {
   return new Promise((resolve, reject) => {
-    const sql = readFileSync('./src/sql/delete_entry.sql', {encoding: 'utf8'})
+    const sql = readFileSync('./sql/delete_entry.sql', {encoding: 'utf8'})
     db.all(sql, {$id: id}, (err, result) => {
       if (err) {
         reject(err)
@@ -120,7 +120,7 @@ export const deleteEntry = (id: string) => {
 
 export const updateEntry = (id: string, updatedEntry: string) => {
   return new Promise((resolve, reject) => {
-    const sql = readFileSync('./src/sql/update_entry.sql', {encoding: 'utf8'})
+    const sql = readFileSync('./sql/update_entry.sql', {encoding: 'utf8'})
     db.all(sql, {$description: updatedEntry, $rowid: id}, (err, result) => {
       if (err) {
         reject(err)

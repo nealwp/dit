@@ -3,7 +3,8 @@
   "version": "1.0.0",
   "description": "cli tool for logging daily work and generating reports",
   "scripts": {
-    "build": "tsc",
+    "check": "tsc --noEmit",
+    "build": "rimraf ./dist && npx tsc && copyfiles package.json README.md LICENSE sql dist/",
     "test": "jest"
   },
   "bin": {
@@ -14,6 +15,8 @@
   "devDependencies": {
     "@types/node": "^17.0.38",
     "@types/sqlite3": "^3.1.8",
+    "copyfiles": "^2.4.1",
+    "rimraf": "^5.0.1",
     "typescript": "^4.7.2"
   },
   "dependencies": {
