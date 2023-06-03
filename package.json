@@ -4,7 +4,7 @@
   "description": "cli tool for logging daily work and generating reports",
   "scripts": {
     "check": "tsc --noEmit",
-    "build": "rimraf ./dist && npx tsc && copyfiles package.json README.md LICENSE sql dist/",
+    "build": "rimraf ./dist && npx tsc && copyfiles package.json README.md LICENSE \"sql/**/*\" dist/",
     "test": "jest"
   },
   "bin": {
