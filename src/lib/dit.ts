@@ -125,18 +125,14 @@ export function edit() {
     .catch((error) => console.log(error))
 }
 
-export function backdate() {
-  const entryDate = process.argv[3]
-  const entryText = process.argv[4]
+export function backdate(entryDate: string, entryText: string) {
   
   if (!entryDate){
-    console.log('Error: backdate command missing entry date')
-    process.exit()
+    throw new Error('backdate command missing entry date')
   }
 
   if (!entryText){
-    console.log('Error: backdate command missing entry text')
-    process.exit()
+    throw new Error('backdate command missing entry text')
   }
 
   const entryDateUTC = new Date(entryDate).toISOString()
