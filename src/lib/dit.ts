@@ -67,6 +67,12 @@ export function rm() {
   .catch((error) => console.log(error))
 }
 
+interface TaskEntry {
+  rowid: number,
+  description: string,
+  date_added: string
+}
+
 export function eod() {
   getTodaysEntries()
     .then((result: TaskEntry[]) => {
