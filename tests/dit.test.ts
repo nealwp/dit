@@ -131,8 +131,9 @@ describe('dit', () => {
         })
 
         it('should delete entry for id', async () => {
-            const rows = await query("SELECT rowid FROM task;") as {rowid: number}[]
-            const rowid = rows[0].rowid 
+            const beforeRows = await query("SELECT rowid FROM task;") as {rowid: number}[]
+            expect(beforeRows.length).toBeGreaterThan(0)
+            const rowid = beforeRows[0].rowid 
             await deleteEntry(db, rowid)
             const afterRows = await query(`SELECT rowid FROM task WHERE rowid = ${rowid};`) as {rowid: number}[]
             expect(afterRows.length).toEqual(0)
