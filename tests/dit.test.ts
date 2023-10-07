@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3'
 import fs from 'node:fs'
-import { addBackdatedEntry, addEntry, getTodaysEntries, getMonthyReport, getAllEntries } from '../src/lib/sqlite3'
+import { addBackdatedEntry, addEntry, getTodaysEntries, getMonthyReport, getAllEntries, deleteEntry } from '../src/lib/sqlite3'
 import { promisify } from 'node:util'
 
 const SQLite3 = sqlite3.verbose()
@@ -123,12 +123,25 @@ describe('dit', () => {
         });
     })
 
+    describe('deleteEntry', () => {
+
+        beforeEach(async() => {
+            await query("DELETE FROM task;")
+            await seedTaskTable()
+        })
+
+        it('should delete entry for id', async () => {
+            const rows = await query("SELECT rowid FROM task;") as {rowid: number}[]
+            const rowid = rows[0].rowid 
+            await deleteEntry(db, rowid)
+            const afterRows = await query(`SELECT rowid FROM task WHERE rowid = ${rowid};`) as {rowid: number}[]
+            expect(afterRows.length).toEqual(0)
+        });
+    })
+
     afterAll(() => {
         // tear down testing db
         fs.rmSync("./testing.db") 
     })
 
-    it('should work', () => {
-        expect(true).toBe(true)
-    })
 })
