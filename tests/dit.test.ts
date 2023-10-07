@@ -1,7 +1,6 @@
 import sqlite3 from 'sqlite3'
-import { backdate } from '../src/lib/dit'
 import fs from 'node:fs'
-import { addBackdatedEntry } from '../src/lib/sqlite3'
+import { addBackdatedEntry, addEntry } from '../src/lib/sqlite3'
 import { promisify } from 'node:util'
 
 const SQLite3 = sqlite3.verbose()
@@ -37,6 +36,10 @@ describe('dit', () => {
 
     describe('addBackdatedEntry', () => {
 
+        beforeEach(async() => {
+            await query("DELETE FROM task;")
+        })
+
         it('should create a entry for given date', async () => {
             const date = new Date("1/1/1970").toISOString()
             const result = await addBackdatedEntry(db, date, "entry text") as {rowid: number}[]
@@ -48,6 +51,26 @@ describe('dit', () => {
         });
     })
 
+    describe('addEntry', () => {
+
+        beforeEach(async() => {
+            await query("DELETE FROM task;")
+        })
+
+        it('should create an entry with current date', async () => {
+            const result = await addEntry(db, "some entry text") as {rowid: number}[]
+            const rowId = result[0].rowid
+
+            const rows = await query(taskQuery(rowId)) as Task[]
+
+            const date = new Date()
+            date.setUTCHours(0,0,0,0)
+
+            expect(new Date(rows[0].dateAdded)).toEqual(date)
+            expect(rows[0].description).toEqual("some entry text")
+        });
+    })
+    
     afterAll(() => {
         // tear down testing db
         fs.rmSync("./testing.db") 

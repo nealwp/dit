@@ -34,7 +34,7 @@ export const initializeDB = () => {
   })
 }
 
-export const addEntry = (entry: string) => {
+export function addEntry(db: sqlite3.Database, entry: string){
   return new Promise((resolve, reject) => {
     const sql = readFileSync('./sql/insert_entry.sql', {encoding: 'utf8'})
     db.all(sql, { $description: entry }, (err, result) => {
