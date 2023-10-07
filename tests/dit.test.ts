@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3'
 import fs from 'node:fs'
-import { addBackdatedEntry, addEntry, getTodaysEntries, getMonthyReport, getAllEntries, deleteEntry } from '../src/lib/sqlite3'
+import { addBackdatedEntry, addEntry, getTodaysEntries, getMonthyReport, getAllEntries, deleteEntry, updateEntry } from '../src/lib/sqlite3'
 import { promisify } from 'node:util'
 
 const SQLite3 = sqlite3.verbose()
@@ -137,6 +137,28 @@ describe('dit', () => {
             await deleteEntry(db, rowid)
             const afterRows = await query(`SELECT rowid FROM task WHERE rowid = ${rowid};`) as {rowid: number}[]
             expect(afterRows.length).toEqual(0)
+        });
+    })
+
+    describe('updateEntry', () => {
+
+        beforeEach(async() => {
+            await query("DELETE FROM task;")
+            await seedTaskTable()
+        })
+
+        it('should update an entry for id', async () => {
+            const beforeRows = await query("SELECT rowid, description FROM task;") as {rowid: number, description: string}[]
+            expect(beforeRows.length).toBeGreaterThan(0)
+            const { rowid, description } = beforeRows[0]
+           
+            const newDescription = "dont bring me down"
+            expect(description).not.toEqual(newDescription)
+
+            await updateEntry(db, rowid, newDescription)
+            const afterRows = await query(`SELECT description FROM task WHERE rowid = ${rowid};`) as {description: string}[]
+            const updatedDescription = afterRows[0].description
+            expect(updatedDescription).toEqual(newDescription)
         });
     })
 

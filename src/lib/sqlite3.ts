@@ -94,7 +94,7 @@ export function deleteEntry (db: sqlite3.Database, id: number){
   })
 }
 
-export const updateEntry = (id: string, updatedEntry: string) => {
+export function updateEntry(db: sqlite3.Database, id: number, updatedEntry: string) {
   return new Promise((resolve, reject) => {
     const sql = readFileSync('./sql/update_entry.sql', {encoding: 'utf8'})
     db.all(sql, {$description: updatedEntry, $rowid: id}, (err, result) => {
