@@ -58,7 +58,7 @@ export function addBackdatedEntry (db: sqlite3.Database, entryDate: string, entr
   })
 }
 
-export const getTodaysEntries = (): Promise<any> => {
+export function getTodaysEntries(db: sqlite3.Database){
   return new Promise((resolve, reject) => {
     const sql = readFileSync('./sql/get_today_entries.sql', {encoding: 'utf8'})
     db.all(sql, (err, result) => {
@@ -70,7 +70,7 @@ export const getTodaysEntries = (): Promise<any> => {
   })
 }
 
-export const getMonthyReport = (): Promise<any> => {
+export function getMonthyReport (db: sqlite3.Database){
   return new Promise((resolve, reject) => {
     const sql = readFileSync('./sql/get_month_entries.sql', {encoding: 'utf8'})
     db.all(sql, (err, result) => {

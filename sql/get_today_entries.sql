@@ -1,3 +1,3 @@
-select rowid, description, date_added 
+select rowid, description, dateAdded 
 from task
-where date(date_added, 'localtime') = date(date('now'), 'localtime');
+where date(dateAdded, 'localtime') = date(date('now'), 'localtime');

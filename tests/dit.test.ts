@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3'
 import fs from 'node:fs'
-import { addBackdatedEntry, addEntry } from '../src/lib/sqlite3'
+import { addBackdatedEntry, addEntry, getTodaysEntries, getMonthyReport } from '../src/lib/sqlite3'
 import { promisify } from 'node:util'
 
 const SQLite3 = sqlite3.verbose()
@@ -11,6 +11,18 @@ const createTaskTableSQL = "CREATE TABLE task (description TEXT NOT NULL, dateAd
 
 function taskQuery(id: number) {
     return `SELECT description, dateAdded FROM task WHERE rowid = ${id};` 
+}
+
+async function seedTaskTable() {
+    const sql = `
+    INSERT INTO task
+    VALUES 
+        ("foo", date('now')),
+        ("bar", date('now')),
+        ("baz", date('now')),
+        ("yesterday", date('now', '-1 day'));
+    `
+    await query(sql)
 }
 
 interface Task {
@@ -71,6 +83,32 @@ describe('dit', () => {
         });
     })
     
+    describe('getTodaysEntries', () => {
+
+        beforeEach(async() => {
+            await query("DELETE FROM task;")
+            await seedTaskTable()
+        })
+
+        it('should retrieve all entries with the current date', async () => {
+            const rows = await getTodaysEntries(db) as Task[]
+            expect(rows.length).toEqual(3)
+        });
+    })
+
+    describe('getMonthlyReport', () => {
+
+        beforeEach(async() => {
+            await query("DELETE FROM task;")
+            await seedTaskTable()
+        })
+
+        it('should retrieve all entries for current month', async () => {
+            const rows = await getMonthyReport(db) as Task[]
+            expect(rows.length).toEqual(4)
+        });
+    })
+
     afterAll(() => {
         // tear down testing db
         fs.rmSync("./testing.db") 
