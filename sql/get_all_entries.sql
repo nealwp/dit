@@ -1,2 +1,2 @@
-select rowid, description, date_added 
+select rowid, description, dateAdded 
 from task

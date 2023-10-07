@@ -1,6 +1,6 @@
 import sqlite3 from 'sqlite3'
 import fs from 'node:fs'
-import { addBackdatedEntry, addEntry, getTodaysEntries, getMonthyReport } from '../src/lib/sqlite3'
+import { addBackdatedEntry, addEntry, getTodaysEntries, getMonthyReport, getAllEntries } from '../src/lib/sqlite3'
 import { promisify } from 'node:util'
 
 const SQLite3 = sqlite3.verbose()
@@ -20,7 +20,8 @@ async function seedTaskTable() {
         ("foo", date('now')),
         ("bar", date('now')),
         ("baz", date('now')),
-        ("yesterday", date('now', '-1 day'));
+        ("yesterday", date('now', '-1 day')),
+        ("ancient", date('now', '-999 days'));
     `
     await query(sql)
 }
@@ -106,6 +107,19 @@ describe('dit', () => {
         it('should retrieve all entries for current month', async () => {
             const rows = await getMonthyReport(db) as Task[]
             expect(rows.length).toEqual(4)
+        });
+    })
+
+    describe('getAllEntries', () => {
+
+        beforeEach(async() => {
+            await query("DELETE FROM task;")
+            await seedTaskTable()
+        })
+
+        it('should retrieve all entries', async () => {
+            const rows = await getAllEntries(db) as Task[]
+            expect(rows.length).toEqual(5)
         });
     })
 

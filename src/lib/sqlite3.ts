@@ -82,7 +82,7 @@ export function getMonthyReport (db: sqlite3.Database){
   })
 }
 
-export const getAllEntries = () => {
+export function getAllEntries(db: sqlite3.Database){
   return new Promise((resolve, reject) => {
     const sql = readFileSync('./sql/get_all_entries.sql', {encoding: 'utf8'})
     db.all(sql, (err, result) => {
