@@ -120,4 +120,4 @@ async function listEntries(db: Database) {
     return db.all(sql.selectAllEntry)
 }
 
-export { listEntries, help, backdateEntry, editEntry, thisMonthsEntries, initialize, todaysEntries, deleteEntry, addEntry }
+export default { listEntries, help, backdateEntry, editEntry, thisMonthsEntries, initialize, todaysEntries, deleteEntry, addEntry }
