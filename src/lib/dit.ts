@@ -1,163 +1,123 @@
-import { 
-  getDBVersion,
-  initializeDB,
-  addEntry,
-  addBackdatedEntry,
-  getTodaysEntries,
-  getMonthyReport,
-  getAllEntries,
-  getEntry,
-  deleteEntry,
-  updateEntry
-} from './sqlite3';
-import promptSync from 'prompt-sync'
-import { spawn } from 'child_process';
+import promptSync from 'prompt-sync';
+import sql from './sql';
+import { Database } from 'sqlite';
 
 const prompt = promptSync();
-const command = process.argv[2];
 
-const writeToClipboard = (data: string) => {
-  spawn('clip').stdin.end(data)
+async function initialize(db: Database) {
+    return db.all(sql.initialize)
 }
 
-export function test() {
-    console.log('app works');
-    getDBVersion()
-    .then((result) => console.log(result))
-    .catch((error) => console.log(error)) 
-}
- 
+async function addEntry(db: Database, entry: string) {
 
-export function init() {
-  initializeDB()
-    .then((result) => console.log(result))
-    .catch((error) => console.log(error))
-}
-
-export function add() {
-  const entry = process.argv[3];
-  if (!entry) {
-    console.log('Error: add command missing entry text')
-    process.exit();
-  }
-  addEntry(entry)
-  .then((result) => console.log(result))
-  .catch((error) => console.log(error))
-}
-
-export function rm() {
-  const entryId = process.argv[3];
-  if (!entryId) {
-    console.log('Error: delete command missing entry id')
-    process.exit()
-  }
-  getEntry(entryId)
-  .then((result) => {
-    console.log(result)
-    const confirmations = ['y','Y','yes','YES', 'Yes'];
-    const response = prompt('Delete this entry? (yes): ', 'yes')
-    if (confirmations.includes(response)) {
-      deleteEntry(entryId)
-      .then((result) => console.log(result))
-      .catch((error) => console.log(error))
-    } else {
-      console.log('no changes made')
+    if (!entry) {
+        return 'Error: add command missing entry text';
     }
-  })
-  .catch((error) => console.log(error))
+
+    return db.all(sql.insertEntry, { $description: entry });
+}
+
+async function deleteEntry(db: Database, id: string) {
+
+    if (!id) {
+        return 'ERROR: delete command missing entry id';
+    }
+
+    const result = await db.all(sql.selectEntry, {$id: id})
+    console.log(result)
+
+    const response = prompt('Delete this entry? (yes): ', 'yes')
+    const confirmations = ['y','Y','yes','YES', 'Yes'];
+
+    if (!confirmations.includes(response)) {
+        return
+    }
+
+    return db.all(sql.deleteEntry, {$id: id})
 }
 
 interface TaskEntry {
-  rowid: number,
-  description: string,
-  date_added: string
+    rowid: number,
+    description: string,
+    date_added: string
 }
 
-export function eod() {
-  getTodaysEntries()
-    .then((result: TaskEntry[]) => {
-      let outputText = '';
-      for (let entry of result) {
+async function todaysEntries(db: Database) {
+    const result = await db.all<TaskEntry[]>(sql.selectTodayEntries);
+    let outputText = '';
+    for (let entry of result) {
         outputText = `${entry.description}. ${outputText}`
-      }
-      writeToClipboard(outputText)
-      console.log(outputText)
-    })
-    .catch((error) => console.log(error))
+    }
+    return outputText
 }
 
-export function eom() {
-  getMonthyReport()
-    .then((result: TaskEntry[]) => {
-      let entries: string[] = [];
-      result.forEach(e => {
+async function thisMonthsEntries(db: Database) {
+    const result = await db.all<TaskEntry[]>(sql.selectMonthEntries);
+    let entries: string[] = [];
+    result.forEach(e => {
         if (!entries.includes(e.description)){
-          entries.push(e.description)
+            entries.push(e.description)
         } 
         return
-      })
-      let output = '';
-      entries.forEach(e => output = `- ${e}.\n${output}`)
-      writeToClipboard(output)
-      console.log(`\n${output}`)
     })
-    .catch((error) => console.log(error))
+    let output = '';
+    entries.forEach(e => output = `- ${e}.\n${output}`)
+    return output
 }
 
-export function edit() {
-  const entryId = process.argv[3];
-  if (!entryId) {
-    console.log('Error: delete command missing entry id')
-    process.exit()
-  }
-  getEntry(entryId)
-  .then((result) => {
-    console.log(result)
-    const updatedEntry = prompt('Updated entry text: ')
-    if (updatedEntry) {
-      updateEntry(entryId, updatedEntry)
-        .then((result) => console.log(result))
-        .catch((error) => console.log(error))
-    } else {
-      console.log('no changes made')
+async function editEntry(db: Database, id: string) {
+    if (!id) {
+        return 'Error: delete command missing entry id';
     }
-  })
-    .catch((error) => console.log(error))
+
+    const result = await db.all(sql.selectEntry, {$id: id})
+
+    console.log(result);
+
+    const updatedEntry = prompt('Updated entry text: ');
+
+    if (!updatedEntry) {
+        return 'no changes made';
+    } 
+
+    return db.all(sql.updateEntry, {$description: updatedEntry, $rowid: id}); 
+
 }
 
-export function backdate(entryDate: string, entryText: string) {
-  
-  if (!entryDate){
-    throw new Error('backdate command missing entry date')
-  }
+function backdateEntry(db: Database, entryDate: string, entryText: string) {
 
-  if (!entryText){
-    throw new Error('backdate command missing entry text')
-  }
+    if (!entryDate){
+        return 'ERROR: backdate command missing entry date';
+    }
 
-  const entryDateUTC = new Date(entryDate).toISOString()
-  addBackdatedEntry(entryDateUTC, entryText)
-    .then((result) => console.log(result))
-    .catch((error) => console.log(error))
+    if (!entryText){
+        return 'ERROR: backdate command missing entry text';
+    }
+
+    const entryDateUTC = new Date(entryDate).toISOString()
+    return db.all(sql.backdateEntry, { $description: entryText, $entrydate: entryDateUTC });
 }
 
 
-export function help() {
-  const helpText = `
-  add <entrytext>\tcreate an entry for the current date
-  all\t\t\tprints all entries
-  delete <id>\t\tdelete an entry by id
-  eod\t\t\tprints all entries for today
-  eom\t\t\tprints all entries for current month
-  help\t\t\tdisplays this help
-  init\t\t\tinitializes database (only used for setup)
-  test\t\t\ttest database connection
-  `
-  console.log(helpText);
+function help() {
+    return `
+Usage: dit <command> <args>
+
+COMMAND                  DESCRIPTION                             ALIAS
+-------                  -----------                             -----
+add <entrytext>          create an entry for the current date    a
+backdate <date> <entry>  create an entry for a given date        b
+delete <id>              delete an entry                         d, rm
+edit <id>                edit entry                              e
+help                     displays help                           h, -h, --help
+list                     prints all entries                      l, ls
+month                    prints all entries for current month    m, eom
+today                    prints all entries for today            t, eod
+`
 }
 
-export function ls() {
-  getAllEntries()
-    .then((result) => console.log(result))
-    .catch((error) => console.log(error))
+async function listEntries(db: Database) {
+    return db.all(sql.selectAllEntry)
 }
+
+export { listEntries, help, backdateEntry, editEntry, thisMonthsEntries, initialize, todaysEntries, deleteEntry, addEntry }
