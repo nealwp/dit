@@ -1,7 +1,7 @@
 import sqlite3 from 'sqlite3';
 import { Database, open } from 'sqlite';
 import fs from 'node:fs';
-import dit from '../src/lib/dit';
+import dit from '../src/dit';
 
 describe('dit', () => {
     let db: Database;
