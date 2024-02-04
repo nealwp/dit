@@ -1,7 +1,8 @@
 {
-  "name": "@nealwp/dit",
-  "version": "1.0.0",
+  "name": "did-it",
+  "version": "0.1.0",
   "description": "cli tool for logging daily work and generating reports",
+  "main": "index.js",
   "scripts": {
     "check": "tsc --noEmit",
     "lint": "npx prettier --check .",
@@ -12,6 +13,10 @@
   },
   "bin": {
     "dit": "./index.js"
+  },
+  "repository": {
+      "type": "git",
+      "url": "https://github.com/nealwp/dit.git"
   },
   "author": "nealwp",
   "license": "ISC",
