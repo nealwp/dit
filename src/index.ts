@@ -1,5 +1,5 @@
 #!/usr/env node
-import dit from './lib/dit'
+import dit from './lib/dit';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import { existsSync, mkdirSync } from 'node:fs';
@@ -7,50 +7,49 @@ import os from 'node:os';
 import path from 'node:path';
 
 async function main(args: string[]) {
-
     const homedir = os.homedir();
     const dbPath = path.join(homedir, '.local/dit');
 
-    if (!existsSync(dbPath)){
+    if (!existsSync(dbPath)) {
         mkdirSync(dbPath);
     }
 
     sqlite3.verbose();
 
     const db = await open({
-        driver: sqlite3.Database, 
+        driver: sqlite3.Database,
         filename: path.join(dbPath, 'dit.db'),
-    })
+    });
 
-    await dit.initialize(db)
+    await dit.initialize(db);
 
     const command = args[0];
     const inputs = args.slice(1);
 
     let text, date, id;
 
-    switch(command) {
+    switch (command) {
         case 'a':
         case 'add':
-            [ text ] = inputs;
+            [text] = inputs;
             if (!text) {
                 console.log('ERROR: add command missing entry text');
-                return
+                return;
             }
             console.log(await dit.addEntry(db, text));
             break;
         case 'b':
         case 'backdate':
-            [ date, text ] = inputs;
+            [date, text] = inputs;
 
-            if (!date){
+            if (!date) {
                 console.log('ERROR: backdate command missing entry date');
-                return
+                return;
             }
 
-            if (!text){
+            if (!text) {
                 console.log('ERROR: backdate command missing entry text');
-                return
+                return;
             }
 
             console.log(await dit.backdateEntry(db, date, text));
@@ -58,28 +57,28 @@ async function main(args: string[]) {
         case 'd':
         case 'rm':
         case 'delete':
-            [ id ] = inputs;
+            [id] = inputs;
 
             if (!id) {
                 console.log('ERROR: delete command missing entry id');
-                return
+                return;
             }
 
             console.log(await dit.deleteEntry(db, id));
             break;
         case 'e':
         case 'edit':
-            [ id, text ] = inputs;
+            [id, text] = inputs;
 
             if (!id) {
                 console.log('ERROR: edit command missing entry id');
-                return
+                return;
             }
 
             if (!text) {
                 console.log('ERROR: edit command missing entry text');
-                return
-            } 
+                return;
+            }
 
             console.log(await dit.editEntry(db, id, text));
             break;
@@ -108,8 +107,7 @@ async function main(args: string[]) {
             console.log(dit.help());
             break;
     }
-
 }
 
 const args = process.argv.slice(2);
-main(args)
+main(args);
