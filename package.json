@@ -4,6 +4,8 @@
   "description": "cli tool for logging daily work and generating reports",
   "scripts": {
     "check": "tsc --noEmit",
+    "lint": "npx prettier --check .",
+    "format": "npx prettier --write .",
     "build": "rimraf ./dist && npx tsc && copyfiles package.json README.md LICENSE dist/",
     "test": "jest",
     "dev": "ts-node ./src/index.ts"
@@ -18,7 +20,9 @@
     "@types/node": "^17.0.45",
     "@types/sqlite3": "^3.1.11",
     "copyfiles": "^2.4.1",
+    "eslint": "^8.56.0",
     "jest": "^29.7.0",
+    "prettier": "^3.2.4",
     "rimraf": "^5.0.5",
     "ts-jest": "^29.1.2",
     "ts-node": "^10.9.2",
