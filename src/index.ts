@@ -1,4 +1,4 @@
-#!/usr/env node
+#!/usr/bin/env node
 import dit from './dit';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
