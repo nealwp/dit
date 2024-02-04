@@ -33,23 +33,55 @@ async function main(args: string[]) {
         case 'a':
         case 'add':
             [ text ] = inputs;
+            if (!text) {
+                console.log('ERROR: add command missing entry text');
+                return
+            }
             console.log(await dit.addEntry(db, text));
             break;
         case 'b':
         case 'backdate':
             [ date, text ] = inputs;
+
+            if (!date){
+                console.log('ERROR: backdate command missing entry date');
+                return
+            }
+
+            if (!text){
+                console.log('ERROR: backdate command missing entry text');
+                return
+            }
+
             console.log(await dit.backdateEntry(db, date, text));
             break;
         case 'd':
         case 'rm':
         case 'delete':
             [ id ] = inputs;
+
+            if (!id) {
+                console.log('ERROR: delete command missing entry id');
+                return
+            }
+
             console.log(await dit.deleteEntry(db, id));
             break;
         case 'e':
         case 'edit':
-            [ id ] = inputs;
-            console.log(await dit.editEntry(db, id));
+            [ id, text ] = inputs;
+
+            if (!id) {
+                console.log('ERROR: edit command missing entry id');
+                return
+            }
+
+            if (!text) {
+                console.log('ERROR: edit command missing entry text');
+                return
+            } 
+
+            console.log(await dit.editEntry(db, id, text));
             break;
         case 't':
         case 'eod':
