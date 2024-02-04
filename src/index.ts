@@ -1,5 +1,5 @@
 #!/usr/env node
-import dit from './lib/dit';
+import dit from './dit';
 import sqlite3 from 'sqlite3';
 import { open } from 'sqlite';
 import { existsSync, mkdirSync } from 'node:fs';
