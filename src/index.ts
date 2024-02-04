@@ -27,7 +27,7 @@ async function main(args: string[]) {
     const command = args[0];
     const inputs = args.slice(1);
 
-    let text, date, id: string;
+    let text, date, id;
 
     switch(command) {
         case 'a':
