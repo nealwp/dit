@@ -1,6 +1,6 @@
 {
   "name": "done-it",
-  "version": "0.1.1",
+  "version": "0.2.0",
   "description": "cli tool for logging daily work and generating reports",
   "main": "index.js",
   "scripts": {
@@ -15,8 +15,8 @@
     "dit": "./index.js"
   },
   "repository": {
-      "type": "git",
-      "url": "https://github.com/nealwp/dit.git"
+    "type": "git",
+    "url": "https://github.com/nealwp/dit.git"
   },
   "author": "nealwp",
   "license": "ISC",
