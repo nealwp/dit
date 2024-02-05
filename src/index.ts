@@ -8,7 +8,7 @@ import path from 'node:path';
 
 async function main(args: string[]) {
     const homedir = os.homedir();
-    const dbPath = path.join(homedir, '.local/dit');
+    const dbPath = path.join(homedir, '.local/share/dit');
 
     if (!existsSync(dbPath)) {
         mkdirSync(dbPath);
